@@ -52,10 +52,16 @@ int main(int argc, const char * argv[])
 
     graph.addDGNodeMember("myOutMesh", "PolygonMesh",FabricCore::Variant(), "SpliceExportNode");
     graph.addDGNodeMember("alembicCachePath", "String",FabricCore::Variant(), "SpliceExportNode");
+    graph.addDGNodeMember("spacing", "Integer",FabricCore::Variant(), "SpliceExportNode");
+    graph.addDGNodeMember("numberOfCopies", "Integer",FabricCore::Variant(), "SpliceExportNode");
 
     DGPort outMeshPort = graph.addDGPort("myOutMesh", "myOutMesh", Port_Mode_IO);
+    DGPort spacingPort = graph.addDGPort("spacing", "spacing", Port_Mode_IN);
+    DGPort numCopiesPort = graph.addDGPort("numberOfCopies", "numberOfCopies", Port_Mode_IN);
     DGPort abcCachePathPort = graph.addDGPort("alembicCachePath", "alembicCachePath", Port_Mode_IN);
 
+    spacingPort.setJSON("2");
+    numCopiesPort.setJSON("4");
     abcCachePathPort.setVariant(FabricCore::Variant::CreateString(alemicCachePath.c_str()));
 
     // setup the kl code
