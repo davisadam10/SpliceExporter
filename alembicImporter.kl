@@ -1,0 +1,19 @@
+require Math;
+require PolygonMesh;
+require Xfo;
+require AlembicWrapper;
+
+operator entry(io PolygonMesh myOutMesh, String alembicCachePath) {
+  myOutMesh.clear();
+
+  AlembicArchiveReader reader = AlembicArchiveReader(alembicCachePath);
+  String allPaths[] = reader.getAllPaths();
+  Integer i;
+  for (i=0; i<allPaths.size(); i++)
+  {
+    AlembicPolyMeshReader meshReader = reader.getPolyMesh(allPaths[i]);
+    
+    meshReader.readSample(0, myOutMesh);
+  
+  } 
+}
