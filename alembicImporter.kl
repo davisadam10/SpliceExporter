@@ -28,13 +28,14 @@ operator entry(Integer spacing, Integer numberOfCopies, io PolygonMesh myOutMesh
     PolygonMesh tmpMesh = PolygonMesh();
     meshReader.readSample(0, tmpMesh);
     Integer a;
+    Integer startOffset = 20;
     for (a=1; a<=numberOfCopies; a++)
     {
   		PolygonMesh tempMesh = tmpMesh.clone();
   		Mat44 worldMatrix = Mat44();
   		worldMatrix.setIdentity();
-  		Integer offset = spacing * a;
-  		worldMatrix.setTranslation(Vec3(offset, 0,0));
+  		startOffset += (spacing * a);
+  		worldMatrix.setTranslation(Vec3(startOffset, 0,0));
   		meshToWorld <<<tempMesh.pointCount()>>> (tempMesh, worldMatrix);
   		
   		if (myOutMesh.pointCount() == 0){
