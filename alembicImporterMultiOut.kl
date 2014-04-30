@@ -1,0 +1,49 @@
+require Math;
+require Geometry;
+require Xfo;
+require AlembicWrapper;
+
+
+operator meshToWorld<<<index>>>(io PolygonMesh mesh, Mat44 worldMatrix ){
+  Vec3 pointPos = mesh.getPointPosition(index);
+  
+  Mat44 pointMatrix = Mat44();
+  pointMatrix.setIdentity();
+  pointMatrix.setTranslation(pointPos);
+
+  Mat44 worldPointPos = worldMatrix * pointMatrix;
+  mesh.setPointPosition(index, worldPointPos.translation());
+}
+
+operator entry(Integer spacing, Integer numberOfCopies, io PolygonMesh myOutMeshes[], String alembicCachePath) {
+  myOutMesh.clear();
+
+  AlembicArchiveReader reader = AlembicArchiveReader(alembicCachePath);
+  String allPaths[] = reader.getAllPaths();
+  Integer i;
+  
+  for (i=0; i<allPaths.size(); i++)
+  {
+    AlembicPolyMeshReader meshReader = reader.getPolyMesh(allPaths[i]);
+    PolygonMesh tmpMesh = PolygonMesh();
+    meshReader.readSample(0, tmpMesh);
+    Integer a;
+    Integer startOffset = 20;
+    for (a=1; a<=numberOfCopies; a++)
+    {
+  		myOutMeshes[a] = tmpMesh.clone();
+  		Mat44 worldMatrix = Mat44();
+  		worldMatrix.setIdentity();
+  		startOffset += (spacing * a);
+  		worldMatrix.setTranslation(Vec3(startOffset, 0,0));
+  		meshToWorld <<<myOutMeshes[a].pointCount()>>> (tempMesh, worldMatrix);
+  		
+  		if (myOutMesh.pointCount() == 0){
+  			myOutMesh = tempMesh; 
+  		}
+  		else{
+  		 myOutMesh.mergeMesh(tempMesh);	
+  		}
+  	}
+  }
+}
