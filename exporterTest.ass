@@ -5,12 +5,12 @@
 options
 {
  name options
- AA_samples 1
+ AA_samples 8
  error_color_bad_pixel 0 1 0
  outputs 
   "RGBA RGBA sitoa_output_filter Passes.Default_Pass.Main" 
- xres 720
- yres 576
+ xres 1024
+ yres 768
  aspect_ratio 1.00000012
  bucket_scanning "spiral"
  texture_max_memory_MB 999999
@@ -129,7 +129,7 @@ procedural
 {
  name splice1
  dso "libFabricSpliceArnold2.so"
- data "thoatSpliceTest2.splice"
+ data "myOutput.splice"
  load_at_init on
  matrix 
   1 0 0 0
@@ -140,9 +140,11 @@ procedural
  declare procedural_shader constant ARRAY NODE
  procedural_shader "standardColor" 
  declare spacing constant INT
- spacing -3
+ spacing -1
  declare numberOfCopies constant INT
  numberOfCopies 10
+ declare alembicCachePath constant STRING
+ alembicCachePath "/home/adam/dev/workspace/git/SpliceExporter/thoatAndRider.abc"
  
 }
 
