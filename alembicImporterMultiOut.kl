@@ -16,8 +16,11 @@ operator meshToWorld<<<index>>>(io PolygonMesh mesh, Mat44 worldMatrix ){
 }
 
 operator entry(Integer spacing, Integer numberOfCopies, io PolygonMesh myOutMeshes[], String alembicCachePath) {
-  myOutMesh.clear();
-
+  
+  if (myOutMeshes.size() != numberOfCopies)
+  {
+    myOutMeshes.resize(numberOfCopies);
+  }
   AlembicArchiveReader reader = AlembicArchiveReader(alembicCachePath);
   String allPaths[] = reader.getAllPaths();
   Integer i;
@@ -29,21 +32,20 @@ operator entry(Integer spacing, Integer numberOfCopies, io PolygonMesh myOutMesh
     meshReader.readSample(0, tmpMesh);
     Integer a;
     Integer startOffset = 20;
-    for (a=1; a<=numberOfCopies; a++)
+
+    for (a=0; a<numberOfCopies; a++)
     {
-  		myOutMeshes[a] = tmpMesh.clone();
+  		PolygonMesh tmpAdam = tmpMesh.clone();
+      myOutMeshes[a] = tmpAdam;
   		Mat44 worldMatrix = Mat44();
   		worldMatrix.setIdentity();
   		startOffset += (spacing * a);
   		worldMatrix.setTranslation(Vec3(startOffset, 0,0));
-  		meshToWorld <<<myOutMeshes[a].pointCount()>>> (tempMesh, worldMatrix);
   		
-  		if (myOutMesh.pointCount() == 0){
-  			myOutMesh = tempMesh; 
-  		}
-  		else{
-  		 myOutMesh.mergeMesh(tempMesh);	
-  		}
+      
+      report ("\n\n\n\nNUMBER OF COPIES");
+      meshToWorld <<<myOutMeshes[a].pointCount()>>> (myOutMeshes[a], worldMatrix);
+      report ("DONE");
   	}
   }
 }
