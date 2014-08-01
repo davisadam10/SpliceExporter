@@ -13,7 +13,7 @@ int main(int argc, const char * argv[])
   
   if(argc !=3)
   {
-    printf("ERROR: Need To Pass The Operator Path And The AlembicCahce Paths\n");
+    printf("ERROR: Need To Pass The Operator Path And The Ouput Path\n");
     return 1;
   }
 
@@ -80,11 +80,14 @@ int main(int argc, const char * argv[])
 		    }
 
 		    // setup the kl code
+		    std::cout << "HERE" << std::endl;
 		    graph.constructKLOperator("entry", klCode.c_str());
-
+		    std::cout << "HERE2" << std::endl;
 		    // evaluate the graph
 		    //graph.evaluate();
-		    graph.saveToFile(outputPath.c_str());	    
+		    std::cout << outputPath.c_str() << std::endl;
+		    graph.saveToFile(outputPath.c_str());
+		    std::cout << "HERE3" << std::endl;
 		}
 
 	  	catch(Exception e)
